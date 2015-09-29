@@ -1,0 +1,39 @@
+
+
+
+yum groupinstall 'Development Tools'
+yum install python-dev
+git clone https://github.com/facebook/buck
+cd buck
+ant
+mkdir ~/bin
+PATH=~/bin:$PATH
+ln -s `pwd`/bin/buck ~/bin/
+ln -s `pwd`/bin/buckd ~/bin/
+which buck
+git clone https://gerrit.googlesource.com/gerrit
+cd gerrit/plugins
+git clone https://gerrit.googlesource.com/plugins/delete-project
+cd ..
+buck build plugins/delete-project:delete-project
+
+Bin file -> ..buck-out/gen/plugins/delete-project/delete-project.jar
+
+
+Some commands buck
+
+Rebuild Buck
+git checkout master
+git pull --rebase
+ant clean jar
+
+Clean Projects Buck
+buck clean in project folder
+
+Delete all generated files in your project.
+git clean -xfdn
+
+
+Source: https://buckbuild.com/concept/troubleshooting.html
+        http://sychen.logdown.com/posts/2014/12/28/delete-project-in-gerrit
+        

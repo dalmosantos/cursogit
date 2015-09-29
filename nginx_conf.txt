@@ -1,0 +1,78 @@
+    # HTTPS server
+    #
+    server {
+        listen       443 ssl;
+        server_name  localhost;
+
+        ssl on;
+        ssl_certificate      /etc/nginx/ssl/server.crt;
+        ssl_certificate_key  /etc/nginx/ssl/newserver.key;
+
+        location /gerrit/ {
+            proxy_pass        http://127.0.0.1:8080/gerrit/;
+            proxy_set_header  X-Forwarded-For $remote_addr;
+            proxy_set_header  Host $host;
+          }
+        location /gitweb {
+           root /usr/share/;
+           index gitweb.cgi;
+           include fastcgi_params;
+           gzip off;
+           fastcgi_param GITWEB_CONFIG /etc/gitweb.conf;
+           if ($uri ~ "/gitweb/gitweb.cgi") {
+              fastcgi_pass unix:/var/run/fcgiwrap.socket;
+           }
+        }
+
+		
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  /var/log/nginx/host.access.log  main;
+
+        location / {
+            root   /srv/www/htdocs/;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+
+         location /gerrit/ {
+            proxy_pass        http://127.0.0.1:8080/gerrit/;
+            proxy_set_header  X-Forwarded-For $remote_addr;
+            proxy_set_header  Host $host;
+         }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /srv/www/htdocs/;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           /srv/www/htdocs/;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+	}

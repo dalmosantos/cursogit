@@ -1,0 +1,45 @@
+[gerrit]
+        basePath = /var/repo
+        canonicalWebUrl = https://54.94.250.194/gerrit
+[database]
+        type = mysql
+        hostname = localhost
+        database = reviewdb
+        username = gerrit
+        poolMaxIdle = 16
+        poolLimit = 64		
+[index]
+        type = LUCENE
+[auth]
+        type = LDAP
+        gitBasicAuth = true
+[ldap]
+        sslVerify = true
+        server = ldaps://54.232.199.156:636
+        username = fellipecm\\aduser
+        accountBase = DC=fellipecm,DC=local
+        groupBase = CN=gitadm,CN=Users,DC=fellipecm,DC=local
+        groupBase = CN=gitint,CN=Users,DC=fellipecm,DC=local
+        groupBase = CN=gitdev,CN=Users,DC=fellipecm,DC=local
+        groupName = cn
+[sendemail]
+        smtpServer = localhost
+[container]
+        user = gerrit
+        javaHome = /opt/jdk1.8.0_60/jre
+[sshd]
+        listenAddress = *:29418
+        threads = 24
+        batchThreads = 2		
+[httpd]
+        listenUrl = proxy-https://*:8080/gerrit/
+[cache]
+        directory = cache
+[gitweb]
+        cgi = /usr/share/gitweb/gitweb.cgi
+[container]
+        heapLimit = 7g
+[core]
+        packedGitOpenFiles = 4096
+        packedGitLimit = 2g
+        packedGitWindowSize = 16k
